@@ -8,100 +8,116 @@ var laMessage = "Last score";
 var currentSc = 0;
 var cuMessage = "Current score";
 var wdth = 500;
+var hght = wdth;
+var mobile;
 
 var food;
 
 function setup() {
-  createCanvas(wdth + 200, wdth);
-  s = new Snake();
-  pickLocation();
+    if (navigator.userAgent.match(/(android|iphone|blackberry|symbian|symbianos|symbos|netfront|model-orange|javaplatform|iemobile|windows phone|samsung|htc|opera mobile|opera mobi|opera mini|presto|huawei|blazer|bolt|doris|fennec|gobrowser|iris|maemo browser|mib|cldc|minimo|semc-browser|skyfire|teashark|teleca|uzard|uzardweb|meego|nokia|bb10|playbook)/gi)) {
+        mobile = true;
+    } else {
+        mobile = false;
+    }
+    if (mobile) {
+        createCanvas(wdth + 200, hght + 300);
+    } else {
+        createCanvas(wdth + 200, hght);
+    }
+    s = new Snake();
+    pickLocation();
 }
 
 function pickLocation() {
-  var cols = floor(wdth / scl);
-  var rows = floor(height / scl);
-  var col = floor(random(cols));
-  var row = floor(random(rows));
-  var retry;
-  // If the food spawn on the snake
-  do {
-    retry = false;
-    if (col === s.x / scl && row === s.y / scl) {
-      retry = true;
-      col = floor(random(cols));
-      row = floor(random(rows));
-    } else {
-      for (var i = 0; i < s.tail.length; i++) {
-        if (col === s.tail[i].x / scl && row === s.tail[i].y / scl) {
-          retry = true;
-          col = floor(random(cols));
-          row = floor(random(rows));
-          break;
+    var cols = floor(wdth / scl);
+    var rows = floor(hght / scl);
+    var col = floor(random(cols));
+    var row = floor(random(rows));
+    var retry;
+    // If the food spawn on the snake
+    do {
+        retry = false;
+        if (col === s.x / scl && row === s.y / scl) {
+            retry = true;
+            col = floor(random(cols));
+            row = floor(random(rows));
+        } else {
+            for (var i = 0; i < s.tail.length; i++) {
+                if (col === s.tail[i].x / scl && row === s.tail[i].y / scl) {
+                    retry = true;
+                    col = floor(random(cols));
+                    row = floor(random(rows));
+                    break;
+                }
+            }
         }
-      }
-    }
-  } while (retry)
+    } while (retry)
 
-  food = createVector(col, row);
-  food.mult(scl);
-  food.gold = (floor(random(5)) == 0);
+    food = createVector(col, row);
+    food.mult(scl);
+    food.gold = (floor(random(5)) == 0);
 }
 
 function draw() {
-  background(51);
-  stroke(255);
-  for (var i = 0; i < 5; i++) {
-    line(wdth + 1 + i, 0, wdth + 1 + i, height);
-  }
-  stroke(0);
+    background(51);
+    stroke(255);
+    for (var i = 0; i < 5; i++) {
+        line(wdth + 1 + i, 0, wdth + 1 + i, hght);
+    }
+    if (mobile) {
+        for (var i = 0; i < 5; i++) {
+            line(0, hght + 1 + i, wdth + 5, hght + 1 + i);
+        }
+    }
+    stroke(0);
 
-  frameRate(fr);
+    frameRate(fr);
 
-  if (s.eat(food)) {
-    pickLocation();
-  }
-  s.death();
-  if (s.xspeed != 0 || s.yspeed != 0) {
-    s.update();
-  }
-  s.show();
+    if (s.eat(food)) {
+        pickLocation();
+    }
+    s.death();
+    if (s.xspeed != 0 || s.yspeed != 0) {
+        s.update();
+    }
+    s.show();
 
-  if (food.gold) {
-    fill(255, 200, 0);
-  } else {
+    if (food.gold) {
+        fill(255, 200, 0);
+    } else {
+        fill(255, 0, 100);
+    }
+    rect(food.x, food.y, scl, scl);
+
+    textSize(25);
     fill(255, 0, 100);
-  }
-  rect(food.x, food.y, scl, scl);
-
-  textSize(25);
-  fill(255, 0, 100);
-  text(beMessage, wdth + 35, 30);
-  text(bestSc, wdth + 80, 60);
-  text(laMessage, wdth + 35, 100);
-  text(lastSc, wdth + 80, 130);
-  text(cuMessage, wdth + 18, 170);
-  text(currentSc, wdth + 80, 200);
-  var cmdTitle = "Commands";
-  text(cmdTitle, wdth + 34, 300);
-  textSize(18);
-  var cmdMessage = "MOVE  : ARROWS\nPAUSE : SPACE";
-  text(cmdMessage, wdth + 22, 350);
+    text(beMessage, wdth + 35, 30);
+    text(bestSc, wdth + 80, 60);
+    text(laMessage, wdth + 35, 100);
+    text(lastSc, wdth + 80, 130);
+    text(cuMessage, wdth + 18, 170);
+    text(currentSc, wdth + 80, 200);
+    var cmdTitle = "Commands";
+    text(cmdTitle, wdth + 34, 300);
+    textSize(18);
+    var cmdMessage = "MOVE  : ARROWS\nPAUSE : SPACE";
+    text(cmdMessage, wdth + 22, 350);
 }
 
 function keyPressed() {
-  if (keyCode === UP_ARROW) {
-    if (s.yspeed != 1)
-      s.dir(0, -1);
-  } else if (keyCode === DOWN_ARROW) {
-    if (s.yspeed != -1)
-      s.dir(0, 1);
-  } else if (keyCode === RIGHT_ARROW) {
-    if (s.xspeed != -1)
-      s.dir(1, 0);
-  } else if (keyCode === LEFT_ARROW) {
-    if (s.xspeed != 1)
-      s.dir(-1, 0);
-  } else if (keyCode === 32) { //SPACE
-    s.dir(0, 0);
-  }
+    if (keyCode === UP_ARROW) {
+        if (s.yspeed != 1)
+            s.dir(0, -1);
+    } else if (keyCode === DOWN_ARROW) {
+        if (s.yspeed != -1)
+            s.dir(0, 1);
+    } else if (keyCode === RIGHT_ARROW) {
+        if (s.xspeed != -1)
+            s.dir(1, 0);
+    } else if (keyCode === LEFT_ARROW) {
+        if (s.xspeed != 1)
+            s.dir(-1, 0);
+    } else if (keyCode === 32) { //SPACE
+        s.dir(0, 0);
+    }
 }
