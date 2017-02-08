@@ -18,6 +18,7 @@ function setup() {
 	}
 	current = grid[0];
 	current.visited = true;
+    current.seen = true;
 }
 
 function draw() {
@@ -44,19 +45,19 @@ function draw() {
 			}
 			else{
 				generated = true;
-				for(var i = 0; i < grid.length; i++){
-					grid[i].visible = false;
-				}
-				current.visible = true;
 			}
 		}
 	}
 	else{
-		stroke(255);
-		fill(255,0,0);
-		rect(0,0,sz/5,sz/5);
-		fill(0,255,0);
-		rect(width - sz/5, height - sz/5, sz/5, sz/5);
+		noStroke();
+        if(current.i != 0 || current.j != 0){
+            fill(255,0,0);
+            rect(0+sz/3, 0+sz/3, sz-sz/1.5+1, sz-sz/1.5+1);
+        }  
+        if(current.i != cols-1 || current.j != raws-1){
+            fill(0,255,0);
+            rect(width - sz +sz/3, height - sz +sz/3, sz-sz/1.5+1, sz-sz/1.5+1);
+        }
 	}
 }
 
@@ -73,7 +74,7 @@ function Cell(i, j) {
 	this.j = j;
 	this.walls = [true, true, true, true];
 	this.visited = false;
-	this.visible = true;
+    this.seen = false;
 
 	this.getTop = function(){
 		return grid[index(i, j - 1)];
@@ -135,38 +136,34 @@ function Cell(i, j) {
 	this.show = function() {
 		var x = this.i * sz;
 		var y = this.j * sz;
-		if(this.visible){
-			if (this.visited) {
-				stroke(0, 127, 127);
-				fill(0, 127, 127);
-				rect(x, y, sz, sz);
-			}
-			if(this.active){
-				if(generated){
-					stroke(255);
-					fill(0, 255 , 255);
-					rect(x+sz/3, y+sz/3, sz-sz/1.5, sz-sz/1.5, 100);
-				}
-				else{
-					stroke(255);
-					fill(0, 255 , 255);
-					rect(x+sz/3, y+sz/3, sz-sz/1.5, sz-sz/1.5);
-				}
-			}
-			stroke(255);
-			if (this.walls[0]) {
-				line(x, y, x + sz, y); // top
-			}
-			if (this.walls[1]) {
-				line(x + sz, y, x + sz, y + sz); // right
-			}
-			if (this.walls[2]) {
-				line(x, y + sz, x + sz, y + sz); // bottom
-			}
-			if (this.walls[3]) {
-				line(x, y, x, y + sz); // left
-			}
-		}
+        if (this.visited) {
+            stroke(0, 90, 142);
+            fill(0, 90, 142);
+            rect(x, y, sz, sz);
+        }
+        if(generated && this.seen){
+            noStroke();
+            fill(0,120,189);
+            rect(x, y, sz, sz);
+        }
+        if(this.active){
+            stroke(255);
+            fill(0, 255 , 255);
+            rect(x+sz/3, y+sz/3, sz-sz/1.5, sz-sz/1.5);
+        }
+        stroke(255);
+        if (this.walls[0]) {
+            line(x, y, x + sz, y); // top
+        }
+        if (this.walls[1]) {
+            line(x + sz, y, x + sz, y + sz); // right
+        }
+        if (this.walls[2]) {
+            line(x, y + sz, x + sz, y + sz); // bottom
+        }
+        if (this.walls[3]) {
+            line(x, y, x, y + sz); // left
+        }
 	}
 }
 
@@ -177,40 +174,29 @@ function keyPressed() {
 				current.active = false;
 				current = current.getTop();
 				current.active = true;
-				current.visible = true;
+                current.seen = true;
 			}
 		} else if (keyCode === RIGHT_ARROW) {
 			if(!current.walls[1]){
 				current.active = false;
 				current = current.getRight();
 				current.active = true;
-				current.visible = true;
+                current.seen = true;
 			}
 		} else if (keyCode === DOWN_ARROW) {
 			if(!current.walls[2]){
 				current.active = false;
 				current = current.getBottom();
 				current.active = true;
-				current.visible = true;
+                current.seen = true;
 			}
 		} else if (keyCode === LEFT_ARROW) {
 			if(!current.walls[3]){
 				current.active = false;
 				current = current.getLeft();
 				current.active = true;
-				current.visible = true;
+                current.seen = true;
 			}
-		}
-		if(current.i === cols - 1 && current.j === raws -1){
-			generated = false;
-			grid = [];
-			for (var j = 0; j < raws; j++) {
-				for (var i = 0; i < cols; i++) {
-					grid.push(new Cell(i, j));
-				}
-			}
-			current = grid[0];
-			current.visited = true;
 		}
 	}
 }
