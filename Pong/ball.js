@@ -1,11 +1,14 @@
 function Ball(x, y) {
 	this.pos = createVector(x, y);
-	this.vel = createVector(0, 0);
+	this.velocity = 10;
+	this.vel = createVector(this.velocity, 0);
 	this.acc = createVector(0, 0);
 	this.width = 20;
 	this.length = 20;
+	this.speed;
 
-	this.glue = false;
+	this.power = 0;
+	this.nbPowers = 2 * 10;
 
 	this.applyForce = function(force) {
 		this.acc.add(force);
@@ -16,23 +19,54 @@ function Ball(x, y) {
 		this.vel.y = ySpeed;
 	}
 
+	this.changePower = function(){
+		this.speed = 0;
+		var tirage = floor(random(0, this.nbPowers + 1));
+		if(tirage < 10){
+			this.power = 0;
+		}
+		else if(tirage < 17){
+			this.power = 2;
+		}
+		else{
+			this.power = 1;
+		}
+	}
+
 	this.update = function() {
 		this.vel.add(this.acc);
+		if(this.power == 2){
+			if(this.vel.x < 0){
+				this.pos.x = this.pos.x - this.speed;
+			}
+			else{
+				this.pos.x = this.pos.x + this.speed;
+			}
+			if(this.vel.y < 0){
+				this.pos.y = this.pos.y - this.speed;
+			}
+			else{
+				this.pos.y = this.pos.y + this.speed;
+			}
+			this.speed += 0.1;
+		}
 		this.pos.add(this.vel);
 		this.acc.mult(0);
-		if (this.pos.x > width){
+		if (this.pos.x  + this.width/2 > width){
 			this.pos = createVector(width/2 - 20, height/2 - 20);
-			this.vel = createVector(5, 0);
+			this.vel = createVector(this.velocity, 0);
 			scoreP1++;
+			this.power = 0;
 		}
-		else if(this.pos.x < 0) {
+		else if(this.pos.x - this.width/2 < 0) {
 			this.pos = createVector(width/2 - 20, height/2 - 20);
-			this.vel = createVector(-5, 0);
+			this.vel = createVector(-this.velocity, 0);
 			scoreP2++;
+			this.power = 0;
 		}
-		else if (this.pos.y + this.length > height || this.pos.y < 0) {
+		else if (this.pos.y + this.length/2 > height || this.pos.y - this.length/2 < 0) {
 			this.pos.sub(this.vel);
-			if (this.glue) {
+			if (this.power == 1) {
 				this.vel.y = 0;
 			} else {
 				this.vel.y = -this.vel.y;
@@ -42,20 +76,14 @@ function Ball(x, y) {
 	}
 
 	this.show = function() {
+		switch(this.power){
+			case 1: fill(2, 149, 7); break;
+			case 2: fill(149, 7, 2); break;
+			case 3: fill(7, 2, 149); break;
+			default: fill(255);
+		}
+		//rect(this.pos.x, this.pos.y, this.width, this.length, 100)
+		ellipse(this.pos.x, this.pos.y, this.width, this.length);
 		fill(255);
-		rect(this.pos.x, this.pos.y, this.width, this.length, 100)
-		//ellipse(this.pos.x, this.pos.y, this.width, this.length);
 	}
-
-	/*this.collision = function(bar){
-		if (this.pos.x < bar.pos.x + bar.width &&
-   this.pos.x + this.width > bar.pos.x &&
-   this.pos.y < bar.pos.y + bar.length &&
-   this.length + this.pos.y > bar.pos.y) {
-    	return true;
-		}
-		else{
-			return false;
-		}
-	}*/
 }

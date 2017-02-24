@@ -5,15 +5,17 @@ var scoreP1 = 0;
 var scoreP2 = 0;
 var pause = false;
 
+var wdth = 1000;
+var hght = 500;
+
 function setup() {
 	createCanvas(windowWidth - 20, windowHeight - 20);
 	ball = new Ball(width / 2, height / 2);
-	ball.setVelocity(5, 0);
 
 	bar1 = new Bar(5, height/2 - 40);
 	bar2 = new Bar(width - 5 - 20, height/2 - 40);
 	textSize(20);
-	bar2.setVelocity(10);
+	text("|", width/2, 20);
 }
 
 function draw() {
@@ -33,15 +35,7 @@ function draw() {
 	ball.update();
 	bar1.collision(ball);
 	bar2.collision(ball);
-	/*if(ball.collision(bar1)){
-		ball.vel.x = - ball.vel.x;
-		ball.update();
-	}
-	if(ball.collision(bar2)){
-		ball.vel.x = - ball.vel.x;
-		ball.update();
-		bar2.setReactTime();
-	}*/
+
 	ball.show();
 
 	/*if(keyIsDown(UP_ARROW)){
@@ -53,15 +47,6 @@ function draw() {
 
 	text(scoreP1, width/2 - 20, 20);
 	text(scoreP2, width/2 + 20, 20);
-}
-
-function mousePressed() {
-	if (ball.glue) {
-		ball.glue = false;
-		ball.setVelocity(ball.vel.x, 10);
-	} else {
-		ball.glue = true;
-	}
 }
 
 function keyPressed() {
