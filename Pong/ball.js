@@ -1,7 +1,7 @@
 function Ball(x, y) {
 	this.pos = createVector(x, y);
 	this.velocity = 10;
-	this.vel = createVector(this.velocity, 0);
+	this.vel = createVector(this.velocity * pow(-1,floor(random(2))), 0);
 	this.acc = createVector(0, 0);
 	this.width = 20;
 	this.length = 20;
@@ -39,7 +39,7 @@ function Ball(x, y) {
 		}
 	}
 
-	this.update = function() {
+	this.update = function(game) {
 		this.vel.add(this.acc);
 		if(this.power == 2){
 			if(this.vel.x < 0){
@@ -58,21 +58,23 @@ function Ball(x, y) {
 		}
 		this.pos.add(this.vel);
 		this.acc.mult(0);
-		if (this.pos.x  + this.width/2 > width){
-			this.pos = createVector(width/2 - 20, height/2 - 20);
+		if (this.pos.x  + this.width/2 > wdth){
+			this.pos = createVector(wdth/2, hght/2);
 			this.vel = createVector(this.velocity, 0);
 			scoreP1++;
 			this.cpt = 0;
 			this.power = 0;
+			game.launch = true;
 		}
 		else if(this.pos.x - this.width/2 < 0) {
-			this.pos = createVector(width/2 - 20, height/2 - 20);
+			this.pos = createVector(wdth/2 - 20, hght/2 - 20);
 			this.vel = createVector(-this.velocity, 0);
 			scoreP2++;
 			this.cpt = 0;
 			this.power = 0;
+			game.launch = true;
 		}
-		else if (this.pos.y + this.length/2 > height || this.pos.y - this.length/2 < 0) {
+		else if (this.pos.y + this.length/2 > hght || this.pos.y - this.length/2 < 0) {
 			this.pos.sub(this.vel);
 			if (this.power == 1) {
 				this.vel.y = 0;

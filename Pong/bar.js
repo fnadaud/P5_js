@@ -1,5 +1,5 @@
 function Bar(x, y) {
-	this.left = (x < width/2);
+	this.left = (x < wdth/2);
 	this.pos = createVector(x, y);
 	this.length = 80;
 	this.width = 20;
@@ -15,11 +15,11 @@ function Bar(x, y) {
 	}
 
 	this.down = function(){
-		if(this.pos.y < height - this.length - this.velocity){
+		if(this.pos.y < hght - this.length - this.velocity){
 			this.pos.y += this.velocity;
 		}
 		else{
-			this.pos.y = height - this.length - 1;
+			this.pos.y = hght - this.length - 1;
 		}
 	}
 
@@ -37,7 +37,7 @@ function Bar(x, y) {
 	}
 
 	this.move = function(ball){
-		if(ball.pos.x > width - width/this.reactTime && ball.vel.x > 0){
+		if(ball.pos.x > wdth - wdth/this.reactTime && ball.vel.x > 0){
 			if(ball.pos.y > this.pos.y + this.length/4){
 				this.down();
 			}
