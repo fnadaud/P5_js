@@ -6,6 +6,7 @@ function Ball(x, y) {
 	this.width = 20;
 	this.length = 20;
 	this.speed;
+	this.cpt = 0;
 
 	this.power = 0;
 	this.nbPowers = 2 * 10;
@@ -21,15 +22,20 @@ function Ball(x, y) {
 
 	this.changePower = function(){
 		this.speed = 0;
-		var tirage = floor(random(0, this.nbPowers + 1));
-		if(tirage < 10){
-			this.power = 0;
-		}
-		else if(tirage < 17){
+		if(this.cpt > 14){
 			this.power = 2;
 		}
 		else{
-			this.power = 1;
+			var tirage = floor(random(0, this.nbPowers + 1));
+			if(tirage < 10){
+				this.power = 0;
+			}
+			else if(tirage < 17){
+				this.power = 2;
+			}
+			else{
+				this.power = 1;
+			}
 		}
 	}
 
@@ -48,7 +54,7 @@ function Ball(x, y) {
 			else{
 				this.pos.y = this.pos.y + this.speed;
 			}
-			this.speed += 0.1;
+			this.speed += 0.05;
 		}
 		this.pos.add(this.vel);
 		this.acc.mult(0);
@@ -56,12 +62,14 @@ function Ball(x, y) {
 			this.pos = createVector(width/2 - 20, height/2 - 20);
 			this.vel = createVector(this.velocity, 0);
 			scoreP1++;
+			this.cpt = 0;
 			this.power = 0;
 		}
 		else if(this.pos.x - this.width/2 < 0) {
 			this.pos = createVector(width/2 - 20, height/2 - 20);
 			this.vel = createVector(-this.velocity, 0);
 			scoreP2++;
+			this.cpt = 0;
 			this.power = 0;
 		}
 		else if (this.pos.y + this.length/2 > height || this.pos.y - this.length/2 < 0) {

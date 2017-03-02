@@ -67,6 +67,7 @@ function Bar(x, y) {
 					ball.vel.x = cos(angle) * ball.velocity;
 					ball.vel.y = sin(angle) * ball.velocity;
 					ball.pos.x = this.pos.x + this.width + ball.width/2 + 1;
+					ball.cpt++;
 					ball.changePower();
 				}
 			}
@@ -94,6 +95,7 @@ function Bar(x, y) {
 					ball.vel.y = sin(angle) * ball.velocity;
 					ball.pos.x = this.pos.x - ball.width/2 - 1;
 					this.setReactTime();
+					ball.cpt++;
 					ball.changePower();
 				}
 			}
