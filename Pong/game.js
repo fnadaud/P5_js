@@ -11,6 +11,8 @@ function Game(computer){
 	this.bar2 = new Bar(wdth - 5 - 20, hght/2 - 40);
 	textSize(20);
 
+	textFont("Arial");
+
 	this.update = function() {
 		fill(51);
 		noStroke();
@@ -49,7 +51,7 @@ function Game(computer){
 		}
 		else{
 			textSize(15);
-			text("Press SPACE to launch the ball", wdth/2 - 110, hght/2 + 50);
+			text("Press SPACE to launch the ball", wdth/2 - 106, hght/2 + 50);
 			textSize(20);
 		}
 

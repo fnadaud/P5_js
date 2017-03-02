@@ -54,7 +54,7 @@ function Ball(x, y) {
 			else{
 				this.pos.y = this.pos.y + this.speed;
 			}
-			this.speed += 0.05;
+			this.speed += 0.075;
 		}
 		this.pos.add(this.vel);
 		this.acc.mult(0);
@@ -67,7 +67,7 @@ function Ball(x, y) {
 			game.launch = true;
 		}
 		else if(this.pos.x - this.width/2 < 0) {
-			this.pos = createVector(wdth/2 - 20, hght/2 - 20);
+			this.pos = createVector(wdth/2, hght/2);
 			this.vel = createVector(-this.velocity, 0);
 			scoreP2++;
 			this.cpt = 0;
@@ -92,7 +92,6 @@ function Ball(x, y) {
 			case 3: fill(7, 2, 149); break;
 			default: fill(255);
 		}
-		//rect(this.pos.x, this.pos.y, this.width, this.length, 100)
 		ellipse(this.pos.x, this.pos.y, this.width, this.length);
 		fill(255);
 	}
